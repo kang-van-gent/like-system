@@ -22,11 +22,19 @@
             <span class="hide-menu">Home</span>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="./index.html" aria-expanded="false">
+            <a class="sidebar-link" href="/" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>
               <span class="hide-menu">Dashboard</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="/add-account" aria-expanded="false">
+              <span>
+                <i class="ti ti-layout-dashboard"></i>
+              </span>
+              <span class="hide-menu">Add Account</span>
             </a>
           </li>
 
@@ -35,7 +43,7 @@
           <div class="d-flex">
             <div class="unlimited-access-title me-3">
               <h6 class="fw-semibold fs-4 mb-6 text-dark w-85">Upgrade to pro</h6>
-              <a href="https://adminmart.com/product/modernize-bootstrap-5-admin-template/" target="_blank" class="btn btn-primary fs-2 fw-semibold lh-sm">Buy Pro</a>
+              <a href="/" class="btn btn-primary fs-2 fw-semibold lh-sm">Buy Pro</a>
             </div>
             <div class="unlimited-access-img">
               <img src="/assets/images/backgrounds/rocket.png" alt="" class="img-fluid">
@@ -63,12 +71,12 @@
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                 <div class="message-body">
-                  <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                  <a href="/add-account" class="d-flex align-items-center gap-2 dropdown-item">
                     <i class="ti ti-mail fs-6"></i>
                     <p class="mb-0 fs-3">Add Account</p>
                   </a>
 
-                  <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                  <a href="/login" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                 </div>
               </div>
             </li>
@@ -91,7 +99,7 @@
               <div class="card">
                 <div class="card-body">
                   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button class="btn btn-sm btn-primary" type="button">ADD SERVICE</button>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">ADD SERVICE</button>
                   </div>
 
                   <form>
@@ -228,6 +236,34 @@
       </div>
 
 
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add API services</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="service-name" class="form-label">Service's name</label>
+          <input type="text" class="form-control" id="service-name" aria-describedby="emailHelp" placeholder="Service's name">
+        </div>
+        <div class="mb-3">
+          <label for="api-url" class="form-label">API's end-point</label>
+          <input type="text" class="form-control" id="api-url" aria-describedby="emailHelp" placeholder="https://example.com/api">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Connect</button>
+      </div>
     </div>
   </div>
 </div>
