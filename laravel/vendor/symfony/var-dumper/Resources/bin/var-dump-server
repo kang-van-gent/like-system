@@ -39,18 +39,18 @@ if (
     !includeIfExists(__DIR__ . '/../../vendor/autoload.php') &&
     !includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')
 ) {
-    fwrite(STDERR, 'Install dependencies using Composer.'.PHP_EOL);
+    fwrite(STDERR, 'Install dependencies using Composer.' . PHP_EOL);
     exit(1);
 }
 
 if (!class_exists(Application::class)) {
-    fwrite(STDERR, 'You need the "symfony/console" component in order to run the VarDumper server.'.PHP_EOL);
+    fwrite(STDERR, 'You need the "symfony/console" component in order to run the VarDumper server.' . PHP_EOL);
     exit(1);
 }
 
 $input = new ArgvInput();
 $output = new ConsoleOutput();
-$defaultHost = '127.0.0.1:9912';
+$defaultHost = '0.0.0.0:9912';
 $host = $input->getParameterOption(['--host'], $_SERVER['VAR_DUMPER_SERVER'] ?? $defaultHost, true);
 $logger = interface_exists(LoggerInterface::class) ? new ConsoleLogger($output->getErrorOutput()) : null;
 
@@ -63,5 +63,4 @@ $app->getDefinition()->addOption(
 $app->add($command = new ServerDumpCommand(new DumpServer($host, $logger)))
     ->getApplication()
     ->setDefaultCommand($command->getName(), true)
-    ->run($input, $output)
-;
+    ->run($input, $output);

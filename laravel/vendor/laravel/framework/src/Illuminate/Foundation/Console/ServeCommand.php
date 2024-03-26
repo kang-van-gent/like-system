@@ -81,14 +81,14 @@ class ServeCommand extends Command
     public function handle()
     {
         $environmentFile = $this->option('env')
-                            ? base_path('.env').'.'.$this->option('env')
-                            : base_path('.env');
+            ? base_path('.env') . '.' . $this->option('env')
+            : base_path('.env');
 
         $hasEnvironment = file_exists($environmentFile);
 
         $environmentLastModified = $hasEnvironment
-                            ? filemtime($environmentFile)
-                            : now()->addDays(30)->getTimestamp();
+            ? filemtime($environmentFile)
+            : now()->addDays(30)->getTimestamp();
 
         $process = $this->startProcess($hasEnvironment);
 
@@ -97,9 +97,11 @@ class ServeCommand extends Command
                 clearstatcache(false, $environmentFile);
             }
 
-            if (! $this->option('no-reload') &&
+            if (
+                !$this->option('no-reload') &&
                 $hasEnvironment &&
-                filemtime($environmentFile) > $environmentLastModified) {
+                filemtime($environmentFile) > $environmentLastModified
+            ) {
                 $environmentLastModified = filemtime($environmentFile);
 
                 $this->newLine();
@@ -136,7 +138,7 @@ class ServeCommand extends Command
     protected function startProcess($hasEnvironment)
     {
         $process = new Process($this->serverCommand(), public_path(), collect($_ENV)->mapWithKeys(function ($value, $key) use ($hasEnvironment) {
-            if ($this->option('no-reload') || ! $hasEnvironment) {
+            if ($this->option('no-reload') || !$hasEnvironment) {
                 return [$key => $value];
             }
 
@@ -165,12 +167,12 @@ class ServeCommand extends Command
     {
         $server = file_exists(base_path('server.php'))
             ? base_path('server.php')
-            : __DIR__.'/../resources/server.php';
+            : __DIR__ . '/../resources/server.php';
 
         return [
             (new PhpExecutableFinder)->find(false),
             '-S',
-            $this->host().':'.$this->port(),
+            $this->host() . ':' . $this->port(),
             $server,
         ];
     }
@@ -235,7 +237,7 @@ class ServeCommand extends Command
     protected function canTryAnotherPort()
     {
         return is_null($this->input->getOption('port')) &&
-               ($this->input->getOption('tries') > $this->portOffset);
+            ($this->input->getOption('tries') > $this->portOffset);
     }
 
     /**
@@ -293,11 +295,11 @@ class ServeCommand extends Command
 
                 $dots = max(terminal()->width() - mb_strlen($formattedStartedAt) - mb_strlen($file) - mb_strlen($runTime) - 9, 0);
 
-                $this->output->write(' '.str_repeat('<fg=gray>.</>', $dots));
+                $this->output->write(' ' . str_repeat('<fg=gray>.</>', $dots));
                 $this->output->writeln(" <fg=gray>~ {$runTime}s</>");
             } elseif (str($line)->contains(['Closed without sending a request'])) {
                 // ...
-            } elseif (! empty($line)) {
+            } elseif (!empty($line)) {
                 $position = strpos($line, '] ');
 
                 if ($position !== false) {
@@ -349,7 +351,7 @@ class ServeCommand extends Command
     protected function getOptions()
     {
         return [
-            ['host', null, InputOption::VALUE_OPTIONAL, 'The host address to serve the application on', Env::get('SERVER_HOST', '127.0.0.1')],
+            ['host', null, InputOption::VALUE_OPTIONAL, 'The host address to serve the application on', Env::get('SERVER_HOST', '0.0.0.0')],
             ['port', null, InputOption::VALUE_OPTIONAL, 'The port to serve the application on', Env::get('SERVER_PORT')],
             ['tries', null, InputOption::VALUE_OPTIONAL, 'The max number of ports to attempt to serve from', 10],
             ['no-reload', null, InputOption::VALUE_NONE, 'Do not reload the development server on .env file changes'],

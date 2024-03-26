@@ -42,7 +42,7 @@ class SubRequestHandler
             ];
             foreach (array_filter($trustedHeaders) as $name => $key) {
                 $request->headers->remove($name);
-                $request->server->remove('HTTP_'.$name);
+                $request->server->remove('HTTP_' . $name);
             }
         }
 
@@ -73,13 +73,13 @@ class SubRequestHandler
             $request->server->set('HTTP_X_FORWARDED_FOR', $v);
         }
 
-        // fix the client IP address by setting it to 127.0.0.1,
+        // fix the client IP address by setting it to 0.0.0.0,
         // which is the core responsibility of this method
-        $request->server->set('REMOTE_ADDR', '127.0.0.1');
+        $request->server->set('REMOTE_ADDR', '0.0.0.0');
 
-        // ensure 127.0.0.1 is set as trusted proxy
-        if (!IpUtils::checkIp('127.0.0.1', $trustedProxies)) {
-            Request::setTrustedProxies(array_merge($trustedProxies, ['127.0.0.1']), Request::getTrustedHeaderSet());
+        // ensure 0.0.0.0 is set as trusted proxy
+        if (!IpUtils::checkIp('0.0.0.0', $trustedProxies)) {
+            Request::setTrustedProxies(array_merge($trustedProxies, ['0.0.0.0']), Request::getTrustedHeaderSet());
         }
 
         try {

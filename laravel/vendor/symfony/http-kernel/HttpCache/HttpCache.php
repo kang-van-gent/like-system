@@ -190,7 +190,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
             $this->traces = [];
             // Keep a clone of the original request for surrogates so they can access it.
             // We must clone here to get a separate instance because the application will modify the request during
-            // the application flow (we know it always does because we do ourselves by setting REMOTE_ADDR to 127.0.0.1
+            // the application flow (we know it always does because we do ourselves by setting REMOTE_ADDR to 0.0.0.0
             // and adding the X-Forwarded-For header, see HttpCache::forward()).
             $this->request = clone $request;
             if (null !== $this->surrogate) {
@@ -475,7 +475,8 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
          * We deviate from this in one detail, namely that we *do* serve entries in the
          * stale-if-error case even if they have a `s-maxage` Cache-Control directive.
          */
-        if (null !== $entry
+        if (
+            null !== $entry
             && \in_array($response->getStatusCode(), [500, 502, 503, 504])
             && !$entry->headers->hasCacheControlDirective('no-cache')
             && !$entry->mustRevalidate()
@@ -702,10 +703,10 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     {
         $path = $request->getPathInfo();
         if ($qs = $request->getQueryString()) {
-            $path .= '?'.$qs;
+            $path .= '?' . $qs;
         }
 
-        return $request->getMethod().' '.$path;
+        return $request->getMethod() . ' ' . $path;
     }
 
     /**

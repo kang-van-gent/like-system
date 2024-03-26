@@ -26,8 +26,8 @@ class MemcachedCaster
     public static function castMemcached(\Memcached $c, array $a, Stub $stub, bool $isNested): array
     {
         $a += [
-            Caster::PREFIX_VIRTUAL.'servers' => $c->getServerList(),
-            Caster::PREFIX_VIRTUAL.'options' => new EnumStub(
+            Caster::PREFIX_VIRTUAL . 'servers' => $c->getServerList(),
+            Caster::PREFIX_VIRTUAL . 'options' => new EnumStub(
                 self::getNonDefaultOptions($c)
             ),
         ];
@@ -53,7 +53,7 @@ class MemcachedCaster
     private static function discoverDefaultOptions(): array
     {
         $defaultMemcached = new \Memcached();
-        $defaultMemcached->addServer('127.0.0.1', 11211);
+        $defaultMemcached->addServer('0.0.0.0', 11211);
 
         $defaultOptions = [];
         self::$optionConstants ??= self::getOptionConstants();
