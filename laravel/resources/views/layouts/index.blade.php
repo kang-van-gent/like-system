@@ -1,5 +1,12 @@
 @extends('layouts')
 @section('contents')
+
+@if(!Session::has('adminData'))
+<script type="text/javascript">
+  window.location.href = "{{url('/login')}}";
+</script>
+@endif
+
 <!--  Body Wrapper -->
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
   <!-- Sidebar Start -->
@@ -83,7 +90,7 @@
                     <p class="mb-0 fs-3">Add Account</p>
                   </a>
 
-                  <a href="/login" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                  <a href="{{url('/logout')}}" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                 </div>
               </div>
             </li>
@@ -106,6 +113,7 @@
               <div class="card">
                 <div class="card-body">
                   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal1" type="button">IMPORT FARM</button>
                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">ADD SERVICE</button>
                   </div>
 
@@ -266,6 +274,30 @@
           <label for="api-url" class="form-label">API's end-point</label>
           <input type="text" class="form-control" id="api-url" aria-describedby="emailHelp" placeholder="https://example.com/api">
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Connect</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Import New facebook farm</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <textarea class="form-control" id="exampleFormControlTextarea1" name="facebookFarm" rows="10"></textarea>
+          <span>Past notepad text here.</span><br>
+          <span>Pattern : <br> uid | token | cookie |||</span>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
