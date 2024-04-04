@@ -10,6 +10,10 @@ Route::get('/login', function () {
     return view('layouts.login');
 });
 
+Route::get('/re-auth', function () {
+    return view('layouts.regis');
+});
+
 Route::get('/farm', function () {
     return view('layouts.farm');
 });
@@ -18,6 +22,7 @@ Route::get('/farm', function () {
 // Authenticate
 Route::get('/login', [AdminController::class, 'index']);
 Route::post('/admin/login', [AdminController::class, 'check_login']);
+Route::post('/admin/regis', [AdminController::class, 'register']);
 Route::get('/logout', [AdminController::class, 'logout']);
 
 // Home
