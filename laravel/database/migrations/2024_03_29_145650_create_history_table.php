@@ -18,6 +18,7 @@ return new class extends Migration
             $table->amount();
             $table->success();
             $table->failed();
+            $table->status();
             $table->timestamps();
         });
     }

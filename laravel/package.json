@@ -4,7 +4,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "start" : "php artisan serve"
+        "start" : "php artisan serve",
+        "queue" : "php artisan queue:work"
     },
     "devDependencies": {
         "axios": "^1.6.4",

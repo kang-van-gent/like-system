@@ -91,7 +91,7 @@ class AdminController extends Controller
             }
             return redirect('/');
         } else {
-            return view('layouts.login')->with('msg', 'Invalid username/Password!!');
+            return redirect('/login')->with('msg', 'Invalid username/Password!!');
         }
     }
 

@@ -1,12 +1,10 @@
 @extends('layouts')
 @section('contents')
 
-@if(!Session::has('adminData'))
-<script type="text/javascript">
-  window.location.href = "{{url('/login')}}";
-</script>
-@endif
 
+@if(Session::has('error'))
+<p class="text-danger"> {{session('error')}}</p>
+@endif
 <!--  Body Wrapper -->
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
   <!-- Sidebar Start -->
@@ -37,11 +35,11 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="/add-account" aria-expanded="false">
+            <a class="sidebar-link" href="/farm" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>
-              <span class="hide-menu">Add Account</span>
+              <span class="hide-menu">My Farm</span>
             </a>
           </li>
 
@@ -117,28 +115,31 @@
                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">ADD SERVICE</button>
                   </div>
 
-                  <form>
+                  <form method="post" action="{{url('/services')}}">@csrf
                     <div class="mb-3">
                       <label for="disabledSelect" class="form-label">Select service</label>
-                      <select id="disabledSelect" class="form-select">
-                        <option>services</option>
+                      <select id="disabledSelect" class="form-select" name="apiUrl">
+                        @if($services)
+                        @foreach($services as $s)
+                        <option value="{{$s->apiUrl}}">{{$s->name}}</option>
+                        @endforeach
+                        @endif
                       </select>
                     </div>
                     <div class="mb-3">
-                      <label for="fabook" class="form-label">Facebook</label>
-                      <input type="text" class="form-control" id="fabook" aria-describedby="emailHelp">
+                      <label for="fabook" class="form-label">Facebook UID</label>
+                      <input type="text" class="form-control" name="facebook" id="fabook">
                     </div>
                     <div class="mb-3">
                       <label for="amount" class="form-label">Amount</label>
-                      <input type="number" class="form-control" id="amount">
+                      <input type="number" class="form-control" name="amount" id="amount">
                     </div>
-
 
                     <div class="d-grid gap-2">
                       <button type="submit" class="btn btn-primary">Submit</button>
-
                     </div>
                   </form>
+
                 </div>
               </div>
             </div>
@@ -169,79 +170,31 @@
                       </th>
                     </tr>
                   </thead>
+
                   <tbody>
+                    @if($history)
+                    @foreach($history as $h)
                     <tr>
                       <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">1</h6>
+                        <h6 class="fw-semibold mb-0">{{$h->id}}</h6>
                       </td>
                       <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                        <span class="fw-normal">Web Designer</span>
+                        <h6 class="fw-semibold mb-1">{{$h->facebookUrl}}</h6>
+                        <span class="fw-normal">{{$h->facebookId}}</span>
                       </td>
 
                       <td class="border-bottom-0">
                         <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
+                          <span @if($h->status=='done' || $h->status=='Done') class="badge bg-success rounded-3 fw-semibold" @elseif($h->status=='on going..') class="badge bg-warning rounded-3 fw-semibold" @else class="badge bg-warning rounded-3 fw-semibold" @endif>{{$h->status}}</span>
                         </div>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">2</h6>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-1">Andrew McDownland</h6>
-                        <span class="fw-normal">Project Manager</span>
                       </td>
 
                       <td class="border-bottom-0">
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-secondary rounded-3 fw-semibold">Medium</span>
-                        </div>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">$24.5k</h6>
+                        <h6 class="fw-semibold mb-0 fs-4">{{$h->success}} / {{$h->amount}}</h6>
                       </td>
                     </tr>
-                    <tr>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">3</h6>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                        <span class="fw-normal">Project Manager</span>
-                      </td>
-
-                      <td class="border-bottom-0">
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                        </div>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">4</h6>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                        <span class="fw-normal">Frontend Engineer</span>
-                      </td>
-
-                      <td class="border-bottom-0">
-                        <div class="d-flex align-items-center gap-2">
-                          <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
-                        </div>
-                      </td>
-                      <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
-                      </td>
-                    </tr>
+                    @endforeach
+                    @endif
                   </tbody>
                 </table>
               </div>
@@ -257,52 +210,66 @@
 
 
 
-<!-- Modal -->
+<!-- Modal for new api service -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add API services</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="service-name" class="form-label">Service's name</label>
-          <input type="text" class="form-control" id="service-name" aria-describedby="emailHelp" placeholder="Service's name">
+      <form method="post" action="{{url('/new-services')}}">@csrf
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add API services</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="mb-3">
-          <label for="api-url" class="form-label">API's end-point</label>
-          <input type="text" class="form-control" id="api-url" aria-describedby="emailHelp" placeholder="https://example.com/api">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="service-name" class="form-label">Service's name</label>
+            <input type="text" name="name" class="form-control" id="service-name" aria-describedby="emailHelp" placeholder="Service's name">
+          </div>
+          <div class="mb-3">
+            <label for="api-url" class="form-label">API's end-point</label>
+            <input type="text" name="apiUrl" class="form-control" id="api-url" aria-describedby="emailHelp" placeholder="https://example.com/api">
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Connect</button>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Connect</button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal for import new facebook farm-->
 <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Import New facebook farm</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <textarea class="form-control" id="exampleFormControlTextarea1" name="facebookFarm" rows="10"></textarea>
-          <span>Past notepad text here.</span><br>
-          <span>Pattern : <br> uid | token | cookie |||</span>
+      <form method="post" action="{{url('/new-farm')}}">@csrf
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Import New facebook farm</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="facebookFarm" rows="10"></textarea>
+            <span>Past notepad text here.</span><br>
+            <span>Pattern : <br> uid | token | cookie |||</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="disabledSelect" class="form-label">Select service</label>
+          <select id="disabledSelect" class="form-select" name="type">
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Connect</button>
-      </div>
+            <option value="ไทย">ไทย</option>
+            <option value="ต่างชาติ">ต่างชาติ</option>
+
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="sunmit" class="btn btn-primary">Connect</button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>

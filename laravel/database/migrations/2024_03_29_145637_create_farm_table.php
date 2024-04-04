@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('farm', function (Blueprint $table) {
+            $table->id();
             $table->uid();
             $table->token();
             $table->cookie();
             $table->status();
             $table->facebookId();
+            $table->type();
             $table->timestamps();
         });
     }
