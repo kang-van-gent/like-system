@@ -5,11 +5,6 @@ use App\Http\Controllers\FarmController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/login', function () {
-    return view('layouts.login');
-});
-
 Route::get('/re-auth', function () {
     return view('layouts.regis');
 });
