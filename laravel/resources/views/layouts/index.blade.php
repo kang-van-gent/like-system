@@ -251,16 +251,17 @@
             <span>Past notepad text here.</span><br>
             <span>Pattern : <br> uid | token | cookie |||</span>
           </div>
-        </div>
-        <div class="mb-3">
-          <label for="disabledSelect" class="form-label">Select service</label>
-          <select id="disabledSelect" class="form-select" name="type">
+          <div class="mb-3">
+            <label for="disabledSelect" class="form-label">Select service</label>
+            <select id="disabledSelect" class="form-select" name="type">
 
-            <option value="ไทย">ไทย</option>
-            <option value="ต่างชาติ">ต่างชาติ</option>
+              <option value="ไทย">ไทย</option>
+              <option value="ต่างชาติ">ต่างชาติ</option>
 
-          </select>
+            </select>
+          </div>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="sunmit" class="btn btn-primary">Connect</button>
