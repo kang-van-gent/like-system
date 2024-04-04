@@ -2,9 +2,6 @@
 @section('contents')
 
 
-@if(Session::has('error'))
-<p class="text-danger"> {{session('error')}}</p>
-@endif
 <!--  Body Wrapper -->
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
   <!-- Sidebar Start -->
