@@ -24,7 +24,7 @@ class IpUtils
         '192.168.0.0/16', // RFC1918
         '172.16.0.0/12',  // RFC1918
         '169.254.0.0/16', // RFC3927
-        '0.0.0.0/8',      // RFC5735
+        '127.0.0.1/8',      // RFC5735
         '240.0.0.0/4',    // RFC1112
         '::1/128',        // Loopback
         'fc00::/7',       // Unique Local Address
@@ -74,7 +74,7 @@ class IpUtils
      */
     public static function checkIp4(string $requestIp, string $ip): bool
     {
-        $cacheKey = $requestIp.'-'.$ip.'-v4';
+        $cacheKey = $requestIp . '-' . $ip . '-v4';
         if (null !== $cacheValue = self::getCacheResult($cacheKey)) {
             return $cacheValue;
         }
@@ -119,7 +119,7 @@ class IpUtils
      */
     public static function checkIp6(string $requestIp, string $ip): bool
     {
-        $cacheKey = $requestIp.'-'.$ip.'-v6';
+        $cacheKey = $requestIp . '-' . $ip . '-v6';
         if (null !== $cacheValue = self::getCacheResult($cacheKey)) {
             return $cacheValue;
         }
@@ -201,7 +201,7 @@ class IpUtils
         $ip = inet_ntop($packedAddress & inet_pton($mask));
 
         if ($wrappedIPv6) {
-            $ip = '['.$ip.']';
+            $ip = '[' . $ip . ']';
         }
 
         return $ip;

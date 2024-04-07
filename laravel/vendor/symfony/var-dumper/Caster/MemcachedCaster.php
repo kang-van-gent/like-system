@@ -53,7 +53,7 @@ class MemcachedCaster
     private static function discoverDefaultOptions(): array
     {
         $defaultMemcached = new \Memcached();
-        $defaultMemcached->addServer('0.0.0.0', 11211);
+        $defaultMemcached->addServer('127.0.0.1', 11211);
 
         $defaultOptions = [];
         self::$optionConstants ??= self::getOptionConstants();

@@ -288,7 +288,7 @@ class Request
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'HTTP_ACCEPT_LANGUAGE' => 'en-us,en;q=0.5',
             'HTTP_ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
-            'REMOTE_ADDR' => '0.0.0.0',
+            'REMOTE_ADDR' => '127.0.0.1',
             'SCRIPT_NAME' => '',
             'SCRIPT_FILENAME' => '',
             'SERVER_PROTOCOL' => 'HTTP/1.1',
@@ -1932,7 +1932,7 @@ class Request
 
         if ((self::$trustedHeaderSet & $type) && $this->headers->has(self::TRUSTED_HEADERS[$type])) {
             foreach (explode(',', $this->headers->get(self::TRUSTED_HEADERS[$type])) as $v) {
-                $clientValues[] = (self::HEADER_X_FORWARDED_PORT === $type ? '0.0.0.0:' : '') . trim($v);
+                $clientValues[] = (self::HEADER_X_FORWARDED_PORT === $type ? '127.0.0.1:' : '') . trim($v);
             }
         }
 
@@ -1948,7 +1948,7 @@ class Request
                     if (str_ends_with($v, ']') || false === $v = strrchr($v, ':')) {
                         $v = $this->isSecure() ? ':443' : ':80';
                     }
-                    $v = '0.0.0.0' . $v;
+                    $v = '127.0.0.1' . $v;
                 }
                 $forwardedValues[] = $v;
             }
@@ -1968,7 +1968,7 @@ class Request
         }
 
         if (!$this->isForwardedValid) {
-            return $this->trustedValuesCache[$cacheKey] = null !== $ip ? ['0.0.0.0', $ip] : [];
+            return $this->trustedValuesCache[$cacheKey] = null !== $ip ? ['127.0.0.1', $ip] : [];
         }
         $this->isForwardedValid = false;
 

@@ -75,7 +75,7 @@ class VarDumper
                 break;
             case 'server' === $format:
             case $format && 'tcp' === parse_url($format, \PHP_URL_SCHEME):
-                $host = 'server' === $format ? $_SERVER['VAR_DUMPER_SERVER'] ?? '0.0.0.0:9912' : $format;
+                $host = 'server' === $format ? $_SERVER['VAR_DUMPER_SERVER'] ?? '127.0.0.1:9912' : $format;
                 $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) ? new CliDumper() : new HtmlDumper();
                 $dumper = new ServerDumper($host, $dumper, self::getDefaultContextProviders());
                 break;

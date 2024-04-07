@@ -123,7 +123,7 @@ trait InteractsWithDockerComposeServices
             in_array('pgsql', $services)
         ) {
             $defaults = [
-                '# DB_HOST=0.0.0.0',
+                '# DB_HOST=127.0.0.1',
                 '# DB_PORT=3306',
                 '# DB_DATABASE=laravel',
                 '# DB_USERNAME=root',
@@ -137,28 +137,28 @@ trait InteractsWithDockerComposeServices
 
         if (in_array('mysql', $services)) {
             $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=mysql', $environment);
-            $environment = str_replace('DB_HOST=0.0.0.0', "DB_HOST=mysql", $environment);
+            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mysql", $environment);
         } elseif (in_array('pgsql', $services)) {
             $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=pgsql', $environment);
-            $environment = str_replace('DB_HOST=0.0.0.0', "DB_HOST=pgsql", $environment);
+            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=pgsql", $environment);
             $environment = str_replace('DB_PORT=3306', "DB_PORT=5432", $environment);
         } elseif (in_array('mariadb', $services)) {
             if ($this->laravel->config->has('database.connections.mariadb')) {
                 $environment = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=mariadb', $environment);
             }
 
-            $environment = str_replace('DB_HOST=0.0.0.0', "DB_HOST=mariadb", $environment);
+            $environment = str_replace('DB_HOST=127.0.0.1', "DB_HOST=mariadb", $environment);
         }
 
         $environment = str_replace('DB_USERNAME=root', "DB_USERNAME=sail", $environment);
         $environment = preg_replace("/DB_PASSWORD=(.*)/", "DB_PASSWORD=password", $environment);
 
         if (in_array('memcached', $services)) {
-            $environment = str_replace('MEMCACHED_HOST=0.0.0.0', 'MEMCACHED_HOST=memcached', $environment);
+            $environment = str_replace('MEMCACHED_HOST=127.0.0.1', 'MEMCACHED_HOST=memcached', $environment);
         }
 
         if (in_array('redis', $services)) {
-            $environment = str_replace('REDIS_HOST=0.0.0.0', 'REDIS_HOST=redis', $environment);
+            $environment = str_replace('REDIS_HOST=127.0.0.1', 'REDIS_HOST=redis', $environment);
         }
 
         if (in_array('meilisearch', $services)) {
