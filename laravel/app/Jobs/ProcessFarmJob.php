@@ -2,8 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Models\caseTable;
 use App\Models\farm;
 use App\Models\history;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,17 +23,19 @@ class ProcessFarmJob implements ShouldQueue
     protected $facebook;
     protected $amount;
     protected $apiUrl;
+    protected $type;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($historyId, $facebook, $amount, $apiUrl)
+    public function __construct($historyId, $facebook, $amount, $apiUrl, $type)
     {
         //
         $this->historyId = $historyId;
         $this->facebook = $facebook;
         $this->amount = $amount;
         $this->apiUrl = $apiUrl;
+        $this->type = $type;
     }
 
     /**
@@ -40,10 +44,14 @@ class ProcessFarmJob implements ShouldQueue
     public function handle(): void
     {
         //
-        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id FROM farm where status = 'alive' and facebook_id not like '%$this->facebook%' or facebook_id is Null");
+        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id FROM farm where status = 'alive' and facebook_id not like '%$this->facebook%' and type = $this->type or facebook_id is Null");
         $success = 0;
         $failed = 0;
         $upHis = history::find($this->historyId);
+
+        if (count($afarm) <= 0) {
+            # code...
+        }
 
         for ($i = 0; $success < $this->amount; $i++) {
 
@@ -66,25 +74,32 @@ class ProcessFarmJob implements ShouldQueue
                 ];
 
                 // Make the API POST request
-                Http::post($this->apiUrl, $data);
+                // $response = Http::post($this->apiUrl, $data);
 
-                $success = $success + 1;
-                $upFarm = farm::find($afarm[$i]->id);
-                $upFarm->facebook_id = $afarm[$i]->facebook_id . '-' . $this->facebook;
-                $upFarm->save();
+                // if response->error != null or undefined means token unavailable
+                if (isset($response['error'])) {
+                    throw new Exception('token died.');
+                } else {
+                    $upHis->success = $success + 1;
+                    $upHis->save();
+                    $upFarm = farm::find($afarm[$i]->id);
+                    $upFarm->facebook_id = $afarm[$i]->facebook_id . '-' . $this->facebook;
+                    $upFarm->save();
+                    $success++;
+                }
             } catch (\Exception $e) {
                 //throw $th;
-                $failed += $failed + 1;
-
+                $upHis->failed = $failed + 1;
+                $upHis->save();
                 // Update farm cause it may be token is dead
                 $farm = farm::find($afarm[$i]->id);
                 $farm->status = 'dead';
                 $farm->save();
+
+                continue;
             }
         }
 
-        $upHis->success = $success;
-        $upHis->failed = $failed;
         $upHis->status = 'Done';
         $upHis->save();
     }

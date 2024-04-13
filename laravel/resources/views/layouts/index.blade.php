@@ -124,6 +124,14 @@
                       </select>
                     </div>
                     <div class="mb-3">
+                      <label for="disabledSelect" class="form-label">Select type</label>
+                      <select id="disabledSelect" class="form-select" name="type">
+                        <option value="ไทย">ไทย</option>
+                        <option value="ต่างชาติ">ต่างชาติ</option>
+
+                      </select>
+                    </div>
+                    <div class="mb-3">
                       <label for="fabook" class="form-label">Facebook UID</label>
                       <input type="text" class="form-control" name="facebook" id="fabook">
                     </div>
@@ -160,7 +168,7 @@
                         <h6 class="fw-semibold mb-0">Facebook</h6>
                       </th>
                       <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Status</h6>
+                        <h6 class="fw-semibold mb-0">status</h6>
                       </th>
                       <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Amount</h6>

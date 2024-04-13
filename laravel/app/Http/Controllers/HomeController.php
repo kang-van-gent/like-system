@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessFarmJob;
+use App\Models\caseTable;
 use App\Models\farm;
 use App\Models\history;
 use App\Models\services;
+use Error;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use PhpParser\Node\Stmt\TryCatch;
+use PHPUnit\Event\Code\Throwable;
 
 class HomeController extends Controller
 {
@@ -23,7 +27,7 @@ class HomeController extends Controller
             return redirect('/login');
         }
 
-        $history = history::all();
+        $history = history::orderBy('id', 'desc')->get();
         $services = services::all();
         return view('layouts.index', ['history' => $history, 'services' => $services]);
         // return view('layouts.index');
@@ -91,7 +95,6 @@ class HomeController extends Controller
                 return redirect('/')->with('msg', 'this facebook account is only ' + count($afarm) + ' availables ,Continue with ' + count($afarm) + ' ?');
             } else {
 
-
                 $success = 0;
                 $failed = 0;
 
@@ -105,8 +108,113 @@ class HomeController extends Controller
                 $history->failed = 0;
                 $history->save();
 
-                ProcessFarmJob::dispatch($history->id, $request->facebook, $request->amount, $request->apiUrl);
+                $upHis = history::find($history->id);
 
+                // test case response.
+
+                // for ($i = 0; $success < $request->amount; $i++) {
+                //     try {
+                //         $data = [
+                //             'method' => 'post',
+                //             'variables' => [
+                //                 'input' => [
+                //                     'is_tracking_encrypted' => false,
+                //                     'page_id' => $request->facebook,
+                //                     'source' => null,
+                //                     'tracking' => null,
+                //                     'actor_id' => $afarm[$i]->uid,
+                //                     'client_mutation_id' => '1'
+                //                 ],
+                //                 'scale' => 1
+                //             ],
+                //             'doc_id' => '6716077648448761',
+                //             'access_token' => $afarm[$i]->token
+                //         ];
+
+                //         // Make the API POST request
+                //         $response = Http::post($request->apiUrl, $data);
+
+                //         // test case response.
+                //         $case = new caseTable();
+                //         $case->facebook = $request->facebook;
+                //         $case->response = $response;
+                //         $case->save();
+
+                //         // if response->error != null or undefined means token unavailable
+                //         if (isset($response['error'])) {
+                //             throw new Exception('token died.');
+                //         } else {
+                //             $upHis->success = $success + 1;
+                //             $upHis->save();
+                //             $upFarm = farm::find($afarm[$i]->id);
+                //             $upFarm->facebook_id = $afarm[$i]->facebook_id . '-' . $request->facebook;
+                //             $upFarm->save();
+                //             $success++;
+                //         }
+
+
+                //         // return redirect('/')->with('error', 'Success');
+                //     } catch (\Exception $th) {
+                //         //throw $th;
+                //         $upHis->failed = $failed + 1;
+                //         $upHis->save();
+                //         // Update farm cause it may be token is dead
+                //         $farm = farm::find($afarm[$i]->id);
+                //         $farm->status = 'dead';
+                //         $farm->save();
+                //         // return redirect('/')->with('error', 'error');
+                //     }
+                // }
+
+
+
+                ProcessFarmJob::dispatch($history->id, $request->facebook, $request->amount, $request->apiUrl, $request->type);
+
+                // for ($i = 0; $success < $request->amount; $i++) {
+                //     try {
+                //         $data = [
+                //             'method' => 'post',
+                //             'variables' => [
+                //                 'input' => [
+                //                     'is_tracking_encrypted' => false,
+                //                     'page_id' => $request->facebook,
+                //                     'source' => null,
+                //                     'tracking' => null,
+                //                     'actor_id' => $afarm[$i]->uid,
+                //                     'client_mutation_id' => '1'
+                //                 ],
+                //                 'scale' => 1
+                //             ],
+                //             'doc_id' => '6716077648448761',
+                //             'access_token' => $afarm[$i]->token
+                //         ];
+
+                //         // Make the API POST request
+                //         Http::post($request->apiUrl, $data);
+
+                //         // test case response.
+                //         // $case = new caseTable();
+                //         // $case->facebook = $this->facebook;
+                //         // $case->response = $response;
+                //         // $case->save();
+
+                //         $upHis->success = $success + 1;
+                //         $upHis->save();
+                //         $upFarm = farm::find($afarm[$i]->id);
+                //         $upFarm->facebook_id = $afarm[$i]->facebook_id . '-' . $request->facebook;
+                //         $upFarm->save();
+                //     } catch (\Throwable $th) {
+                //         //throw $th;
+                //         $upHis->failed = $failed + 1;
+                //         $upHis->save();
+                //         // Update farm cause it may be token is dead
+                //         $farm = farm::find($afarm[$i]->id);
+                //         $farm->status = 'dead';
+                //         $farm->save();
+                //     }
+                // }
+                $upHis->status = 'Done';
+                $upHis->save();
 
                 return redirect('/')->with('error', 'Success');
             }
