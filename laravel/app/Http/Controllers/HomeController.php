@@ -87,7 +87,7 @@ class HomeController extends Controller
     public function services(Request $request)
     {
         // history 
-        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id FROM farm where status = 'alive' and facebook_id not like '%$request->facebook%' or facebook_id is Null");
+        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id FROM farm where status = 'alive' and type = $request->type and facebook_id not like '%$request->facebook%'  or facebook_id is Null");
 
         if (count($afarm) > 0) {
 
