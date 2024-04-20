@@ -168,8 +168,11 @@
                         <h6 class="fw-semibold mb-0">Facebook</h6>
                       </th>
                       <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">status</h6>
+                        <h6 class="fw-semibold mb-0">Status</h6>
                       </th>
+                      <!-- <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">response</h6>
+                      </th> -->
                       <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Amount</h6>
                       </th>
@@ -187,6 +190,12 @@
                         <h6 class="fw-semibold mb-1">{{$h->facebookUrl}}</h6>
                         <span class="fw-normal">{{$h->facebookId}}</span>
                       </td>
+                      <!-- <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-1">{{$h->facebook}}</h6>
+                      </td>
+                      <td class="border-bottom-0">
+                        <h6 class="fw-semibold mb-1">{{$h->response}}</h6>
+                      </td> -->
 
                       <td class="border-bottom-0">
                         <div class="d-flex align-items-center gap-2">
