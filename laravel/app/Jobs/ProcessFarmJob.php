@@ -44,7 +44,7 @@ class ProcessFarmJob implements ShouldQueue
     public function handle(): void
     {
         //
-        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id FROM farm where status = 'alive' and facebook_id not like '%$this->facebook%' or facebook_id is Null");
+        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id.type FROM farm where status = 'alive' and type='$this->type' and facebook_id not like '%$this->facebook%' or facebook_id is Null");
         $success = 0;
         $failed = 0;
         $upHis = history::find($this->historyId);
