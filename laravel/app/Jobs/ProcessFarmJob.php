@@ -44,11 +44,12 @@ class ProcessFarmJob implements ShouldQueue
     public function handle(): void
     {
         //
-        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id FROM farm where status = 'alive' and type = '$this->type' and facebook_id not like '%$this->facebook%' or facebook_id is Null");
+        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id FROM farm where status = 'alive' and facebook_id not like '%$this->facebook%' or facebook_id is Null");
         $success = 0;
         $failed = 0;
         $upHis = history::find($this->historyId);
 
+        // 1 : 1 s 1400 : 1400s 
         for ($i = 0; $success < $this->amount; $i++) {
 
             try {
@@ -84,6 +85,7 @@ class ProcessFarmJob implements ShouldQueue
             } catch (\Exception $e) {
                 //throw $th;
                 $upHis->failed = $failed + 1;
+                $failed++;
                 $upHis->save();
 
                 // Update farm cause it may be token is dead
