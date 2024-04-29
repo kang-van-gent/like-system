@@ -15,7 +15,7 @@ class FarmController extends Controller
         if (!session('adminData')) {
             return redirect('/login');
         }
-        $farm = farm::all();
+        $farm = farm::orderBy('id', 'desc')->take(100)->get();
         return view('layouts.farm', ['farms' => $farm]);
     }
 

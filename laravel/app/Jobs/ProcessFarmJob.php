@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -44,7 +43,7 @@ class ProcessFarmJob implements ShouldQueue
     public function handle(): void
     {
         //
-        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id.type FROM farm where status = 'alive' and type='$this->type' and facebook_id not like '%$this->facebook%' or facebook_id is Null");
+        $afarm = DB::SELECT("SELECT id,uid,token,status,facebook_id,type FROM farm where status = 'alive' and type='$this->type' and (facebook_id not like '%$this->facebook%' or facebook_id is Null)");
         $success = 0;
         $failed = 0;
         $upHis = history::find($this->historyId);
@@ -73,19 +72,24 @@ class ProcessFarmJob implements ShouldQueue
                 // Make the API POST request
                 $response = Http::post($this->apiUrl, $data);
 
+                $case = new caseTable();
+                $case->facebook = $this->facebook;
+                $case->response = $response;
+                $case->save();
+
                 if (isset($response['error'])) {
                     throw new Exception('token died.');
                 }
-                $upHis->success = $success + 1;
+                $success++;
+                $upHis->success = $success;
                 $upHis->save();
                 $upFarm = farm::find($afarm[$i]->id);
                 $upFarm->facebook_id = $afarm[$i]->facebook_id . '-' . $this->facebook;
                 $upFarm->save();
-                $success++;
             } catch (\Exception $e) {
                 //throw $th;
-                $upHis->failed = $failed + 1;
                 $failed++;
+                $upHis->failed = $failed;
                 $upHis->save();
 
                 // Update farm cause it may be token is dead
@@ -95,7 +99,6 @@ class ProcessFarmJob implements ShouldQueue
                 continue;
             }
         }
-
 
         $upHis->status = 'Done';
         $upHis->save();

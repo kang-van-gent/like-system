@@ -204,7 +204,7 @@
                       </td>
 
                       <td class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0 fs-4">{{$h->success}} / {{$h->amount}}</h6>
+                        <h6 class="fw-semibold mb-0 fs-4">{{$h->success}} / {{$h->failed}} / {{$h->amount}}</h6>
                       </td>
                     </tr>
                     @endforeach
